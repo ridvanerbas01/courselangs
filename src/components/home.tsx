@@ -11,45 +11,29 @@ const Home = () => {
   useEffect(() => {
     // Check if user is already logged in
     const checkSession = async () => {
-      // Önce localStorage'dan oturum bilgilerini kontrol et
-      const savedSession = localStorage.getItem("userSession");
-      if (savedSession) {
-        const sessionData = JSON.parse(savedSession);
-        setIsLoggedIn(sessionData.isLoggedIn);
-        setUserName(sessionData.userName);
-        setShowAuthModal(false);
-      }
-
-      // Supabase oturumunu kontrol et
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        setIsLoggedIn(true);
-        // Get user profile
-        const { data: userData } = await supabase.auth.getUser();
-        if (userData.user) {
-          const userName =
-            userData.user.user_metadata?.full_name ||
-            userData.user.email?.split("@")[0] ||
-            "User";
-          setUserName(userName);
-
-          // Oturum bilgilerini localStorage'a kaydet/güncelle
-          localStorage.setItem(
-            "userSession",
-            JSON.stringify({
-              isLoggedIn: true,
-              userName: userName,
-              userId: userData.user.id,
-            }),
-          );
+      try {
+        // Supabase oturumunu kontrol et
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          setIsLoggedIn(true);
+          // Get user profile
+          const { data: userData } = await supabase.auth.getUser();
+          if (userData.user) {
+            const userName =
+              userData.user.user_metadata?.full_name ||
+              userData.user.email?.split("@")[0] ||
+              "User";
+            setUserName(userName);
+          }
+          // Close auth modal if it's open
+          setShowAuthModal(false);
+        } else {
+          setIsLoggedIn(false);
+          setUserName("User");
         }
-        // Close auth modal if it's open
-        setShowAuthModal(false);
-      } else {
-        // Eğer supabase oturumu yoksa localStorage'daki bilgileri temizle
-        localStorage.removeItem("userSession");
+      } catch (error) {
+        console.error("Error checking session:", error);
         setIsLoggedIn(false);
-        setUserName("User");
       }
     };
 
@@ -95,20 +79,9 @@ const Home = () => {
             userData.user.email?.split("@")[0] ||
             "User",
         );
-
-        // Oturum bilgilerini localStorage'a kaydet
-        localStorage.setItem(
-          "userSession",
-          JSON.stringify({
-            isLoggedIn: true,
-            userName:
-              userData.user.user_metadata?.full_name ||
-              userData.user.email?.split("@")[0] ||
-              "User",
-            userId: userData.user.id,
-          }),
-        );
       }
+      // Redirect to dashboard after login
+      window.location.href = "/dashboard";
     } catch (error) {
       console.error("Error getting user data:", error);
     }

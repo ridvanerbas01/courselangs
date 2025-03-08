@@ -22,7 +22,15 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const LandingPage = () => {
+interface LandingPageProps {
+  onLogin?: () => void;
+  onSignup?: () => void;
+}
+
+const LandingPage = ({
+  onLogin = () => {},
+  onSignup = () => {},
+}: LandingPageProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
@@ -50,11 +58,20 @@ const LandingPage = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 pt-4"
             >
-              <Button size="lg" className="text-lg px-8 py-6">
+              <Button
+                size="lg"
+                className="text-lg px-8 py-6"
+                onClick={onSignup}
+              >
                 Get Started Free
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                Explore Features
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6"
+                onClick={onLogin}
+              >
+                Login
               </Button>
             </motion.div>
           </div>
@@ -376,6 +393,79 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+            About English Learning Platform
+          </h2>
+
+          <div className="max-w-3xl mx-auto mb-12">
+            <p className="text-lg text-gray-700 mb-6">
+              Welcome to our English Learning Platform, a comprehensive tool
+              designed to help you master the English language through
+              interactive exercises, personalized learning paths, and
+              comprehensive progress tracking.
+            </p>
+            <p className="text-lg text-gray-700 mb-6">
+              Whether you're a beginner just starting your English journey or an
+              advanced learner looking to refine your skills, our platform
+              offers content and exercises tailored to your level and learning
+              goals.
+            </p>
+          </div>
+
+          <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">
+            Our Features
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <BookOpen className="h-8 w-8 text-blue-500 mr-3" />
+                <h4 className="text-xl font-semibold">Comprehensive Content</h4>
+              </div>
+              <p className="text-gray-700">
+                Access thousands of words, phrases, and sentences categorized by
+                difficulty and topic.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <Brain className="h-8 w-8 text-purple-500 mr-3" />
+                <h4 className="text-xl font-semibold">Adaptive Learning</h4>
+              </div>
+              <p className="text-gray-700">
+                Our system adapts to your progress, focusing on areas where you
+                need more practice.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <Headphones className="h-8 w-8 text-green-500 mr-3" />
+                <h4 className="text-xl font-semibold">Audio Pronunciation</h4>
+              </div>
+              <p className="text-gray-700">
+                Listen to native speakers and practice your pronunciation with
+                feedback.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Button
+              onClick={onSignup}
+              size="lg"
+              className="px-8 py-6 h-auto text-lg"
+            >
+              Start Learning Now
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-12">
@@ -427,7 +517,10 @@ const LandingPage = () => {
               placeholder="Enter your email"
               className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
             />
-            <Button className="bg-white text-blue-600 hover:bg-white/90">
+            <Button
+              className="bg-white text-blue-600 hover:bg-white/90"
+              onClick={onSignup}
+            >
               Get Started Free
             </Button>
           </div>

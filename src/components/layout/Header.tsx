@@ -60,14 +60,15 @@ const Header = ({
               >
                 Dashboard
               </Link>
+              <Button
+                variant="outline"
+                className="text-red-600 border-red-200 hover:bg-red-50"
+                onClick={onLogout}
+              >
+                Çıkış Yap
+              </Button>
             </>
           )}
-          <Link
-            to="/about"
-            className="text-gray-700 hover:text-blue-600 font-medium"
-          >
-            About
-          </Link>
         </nav>
 
         {/* Search Bar */}
@@ -131,11 +132,9 @@ const Header = ({
                     className="text-red-600 cursor-pointer"
                     onClick={() => {
                       onLogout();
-                      // Redirect to home page after logout
-                      window.location.href = "/";
                     }}
                   >
-                    Logout
+                    Çıkış Yap
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -188,21 +187,25 @@ const Header = ({
 
           <nav className="flex flex-col space-y-3">
             {isLoggedIn && (
-              <Link
-                to="/dashboard"
-                className="text-gray-700 hover:text-blue-600 font-medium py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Dashboard
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 font-medium py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  className="text-red-600 font-medium py-2 text-left"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onLogout();
+                  }}
+                >
+                  Çıkış Yap
+                </button>
+              </>
             )}
-            <Link
-              to="/about"
-              className="text-gray-700 hover:text-blue-600 font-medium py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
           </nav>
 
           {!isLoggedIn && (

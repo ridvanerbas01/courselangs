@@ -15,28 +15,22 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      // Önce localStorage'dan oturum bilgilerini kontrol et
-      const savedSession = localStorage.getItem("userSession");
-
-      if (savedSession) {
-        // localStorage'da oturum bilgisi var, geçerli mi kontrol et
+      try {
+        // Supabase auth durumunu kontrol et
         const { data } = await supabase.auth.getSession();
         if (data.session) {
           // Geçerli oturum var
           setIsAuthenticated(true);
-          setIsCheckingAuth(false);
-          return;
-        }
-      }
-
-      // Supabase auth durumunu kontrol et
-      if (!loading) {
-        if (user) {
-          setIsAuthenticated(true);
-        } else {
+        } else if (!loading && !user) {
           // Kullanıcı oturum açmamış, ana sayfaya yönlendir
           navigate("/", { replace: true });
+        } else if (user) {
+          setIsAuthenticated(true);
         }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        navigate("/", { replace: true });
+      } finally {
         setIsCheckingAuth(false);
       }
     };
